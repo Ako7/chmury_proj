@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 module.exports = async () => {
     const Data = mongoose.model("Data");
-    const result = await Data.deleteMany({});
+    //const result = await Data.deleteMany({});
     //console.log("Removed", result.deletedCount, "records");
 
     const recordsToAdd = [
@@ -34,6 +34,6 @@ module.exports = async () => {
     
     for (const recordData of recordsToAdd) {
         const newRecord = new Data(recordData);
-        await newRecord.save();
+        //await newRecord.save();
     }
 }

@@ -22,7 +22,7 @@ const DeleteRecord = ({ recordId }) => {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 1000 
           });
-          timeout()
+        timeout()
         
       } else {
         console.log("Failed to delete record");
@@ -31,9 +31,6 @@ const DeleteRecord = ({ recordId }) => {
       console.log(error);
     }
   };
-  if(deleted){
-    
-  }
 
   return (
     <div>

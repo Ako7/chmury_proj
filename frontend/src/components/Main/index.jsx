@@ -66,7 +66,7 @@ const Main = () => {
                     {showMenu[index] && (
                         <div className={styles.tab_menu}>
                         <DeleteRecord recordId={item._id} />
-                        <UpdateRecord />
+                        <UpdateRecord record={item}/>
                         </div>
                     )}
                     

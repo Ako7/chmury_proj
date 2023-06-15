@@ -41,20 +41,30 @@ app.get("/api/data_us", async (req, res) => {
     }
   });
 app.delete("/api/data/:recordId", async (req, res) => {
-const recordId = req.params.recordId;
+  const recordId = req.params.recordId;
 
-try {
-    // Tutaj możesz wykonać operacje usunięcia rekordu z bazy danych
-    // na podstawie przekazanego recordId
+  try {
+      await Data.findByIdAndDelete(recordId);
+      res.status(200).json({ message: "Record deleted successfully" });
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Failed to delete record" });
+  }
+});
 
-    // Przykład usunięcia rekordu z bazy danych przy użyciu Mongoose
-    await Data.findByIdAndDelete(recordId);
+app.post('/api/updateData', (req, res) => {
+  const formData = req.body;
+  const dataId = formData.id;
 
-    res.status(200).json({ message: "Record deleted successfully" });
-} catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Failed to delete record" });
-}
+  Data.findByIdAndUpdate(dataId, formData)
+    .exec()
+    .then(() => {
+      res.send('Dane zaktualizowane');
+    })
+    .catch((error) => {
+      console.error('Błąd aktualizacji danych w bazie:', error);
+      res.status(500).send('Błąd serwera');
+    });
 });
 
 const port = process.env.PORT || 8080
