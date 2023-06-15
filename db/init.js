@@ -2,5 +2,5 @@ const result = db.collection("users").insertOne({ firstName: "John", lastName: "
 if (result.insertedId) {
     print("Document inserted successfully!");
   } else {
-    print("Failed to insert document.");
+    print("Failed to insert documaent.");
   }

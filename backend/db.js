@@ -23,13 +23,6 @@ module.exports = () => {
     try {
         mongoose.connect(process.env.DB, connectionParams)
         console.log("Connected to database successfully")
-        //const user = { firstName: "John", lastName: "John", email: "tom1@tom.pl", password: "$2b$10$940vnExeWr3u74df1MmMRe3pbX39LAoNwG1tKoBcDtpUT3ZIjqr0a" };
-        //mongoose.model("User").create(user);
-        //console.log("Created user?")
-        const Data = mongoose.model("Data");
-        const newData = new Data({ mark: "opel", model: "combo", generation_name: "gen-d-2011", year: "2015", mileage: "139568", vol_engine: "1248", fuel: "Diesel", city: "Janki", province: "Mazowieckie", price: "35900" });
-        newData.save();
-        //console.log("Added?")
     } catch (error) {
         console.log(error);
         console.log("Could not connect database!")

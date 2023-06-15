@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import styles from "./styles.module.css"
 
 const DeleteRecord = ({ recordId }) => {
   const [deleted, setDeleted] = useState(false);
   const timeout = setTimeout(() => {
-    window.location.reload();
-    setDeleted(true);
-  }, 10000);
+    if(deleted){
+      window.location.reload();
+    }
+    setDeleted(false)
+  }, 1500);
   const handleDelete = async () => {
     try {
       const response = await fetch(`http://localhost:8080/api/data/${recordId}`, {
@@ -34,7 +37,7 @@ const DeleteRecord = ({ recordId }) => {
 
   return (
     <div>
-      <button onClick={handleDelete}>Delete Record</button>
+      <button  className={styles.pink_btn} onClick={handleDelete}>Delete Record</button>
     </div>
   );
 };
