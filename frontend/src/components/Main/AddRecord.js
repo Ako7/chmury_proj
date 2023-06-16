@@ -2,69 +2,116 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./styles.module.css"
+//import validator from 'validator';
 
-const UpdateRecord = ({ record }) => {
+const AddRecord = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [formData, setFormData] = useState({
-        id: record._id,
-        mark: record.mark,
-        model: record.model,
-        year: record.year,
-        mileage: record.mileage,
-        vol_engine: record.vol_engine,
-        fuel: record.fuel,
-        city: record.city,
-        province: record.province,
-        price: record.price
+        mark: "",
+        model: "",
+        generation_name: "-",
+        year: "",
+        mileage: "",
+        vol_engine: "",
+        fuel: "",
+        city: "",
+        province: "",
+        price: ""
     });
-    const [deleted, setDeleted] = useState(false);
+    const [added, setAdded] = useState(false);
     setTimeout(() => {
-        if(deleted){
+        if(added){
         window.location.reload();
         }
-        setDeleted(false)
+        setAdded(false)
     }, 1500);
     const openPopup = () => {
-      setIsOpen(true);
-    };
-  
+        setIsOpen(true);
+      };
+    
     const closePopup = () => {
-      setIsOpen(false);
+    setIsOpen(false);
     };
-  
     const handleInputChange = (e) => {
-      const { name, value } = e.target;
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    };
-  
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
+      };
+    const [isValid, setIsValid] = useState(true)
     const handleSubmit = (e) => {
-      e.preventDefault();
-  
-      fetch('http://localhost:8080/api/updateData', {
+    e.preventDefault();
+    if(!(/^\d+$/.test(formData.year))){
+        toast.success("Rok musi być liczbą!", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000 
+        });
+        setIsValid(false)
+    }else{
+        setIsValid(true)
+    }
+    if(!(/^\d+$/.test(formData.mileage))){
+        toast.success("Przebieg musi być liczbą!", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000 
+        });
+        setIsValid(false)
+    }else{
+        setIsValid(true)
+    }
+    if(!(/^\d+$/.test(formData.vol_engine))){
+        toast.success("Pojemnosc musi być liczbą!", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000 
+        });
+        setIsValid(false)
+    }else{
+        setIsValid(true)
+    }
+    if(!(/^\d+$/.test(formData.price))){
+        toast.success("Cena musi być liczbą!", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000 
+    });
+    setIsValid(false)
+    }else{
+        setIsValid(true)
+    }
+    if(formData.city===""||formData.mark===""||formData.year===""||formData.mileage===""||formData.vol_engine===""||formData.fuel===""||formData.city===""||formData.province===""||formData.price===""){
+        toast.success("Formularz nie może zawierać pustych pol!", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000 
+        });
+    }else if(!isValid){
+
+    }else{
+    fetch('http://localhost:8080/api/addData', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-      })
+    })
         .then((response) => response.json())
+        .then((data) => {
+        // Przetwórz odpowiedź z backendu
+        // ...
+        })
         .catch((error) => {
-          console.error('Błąd:', error);
+        console.error('Błąd:', error);
         });
-        setDeleted(true);
-        toast.success("Aktualizacja!", {
+        setAdded(true);
+        toast.success("Dodawanie!", {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 1000 
-          });
+        });
         closePopup();
+    }
     };
-  
   return (
     <div>
-      <button  className={styles.pink_btn} onClick={openPopup}>Update Record</button>
+      <button  className={styles.white_btn}  onClick={openPopup}>Add Record</button>
         <div>
             {isOpen && (
                 <div className={styles.popup}>
@@ -89,4 +136,4 @@ const UpdateRecord = ({ record }) => {
   );
 };
 
-export default UpdateRecord;
+export default AddRecord;

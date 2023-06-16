@@ -21,9 +21,41 @@ app.use("/api/users", userRoutes)
 app.use("/api/auth", authRoutes)
 dbImport()
 
-app.get("/api/data", async (req, res) => {
+app.get("/api/data/:col/:met", async (req, res) => {
+  const col = req.params.col;
+  const met = req.params.met;
     try {
-      const data = await Data.find();
+      var data = await Data.find().sort();
+      if(col==="def"&&met==="asc"){
+        data = await Data.find().sort();
+      }
+      if(col==="yr"&&met==="asc"){
+        data = await Data.aggregate([{$addFields: {yrNumber: { $toInt: "$year" }}},{$sort: { yrNumber: 1 } }]);
+      }
+      if(col==="yr"&&met==="desc"){
+        data = await Data.aggregate([{$addFields: {yrNumber: { $toInt: "$year" }}},{$sort: { yrNumber: -1 } }]);
+      }
+      if(col==="pr"&&met==="asc"){
+        data = await Data.aggregate([{$addFields: {priceNumber: { $toInt: "$price" }}},{$sort: { priceNumber: 1 } }]);
+      }
+      if(col==="pr"&&met==="desc"){
+        data = await Data.aggregate([{$addFields: {priceNumber: { $toInt: "$price" }}},{$sort: { priceNumber: -1 } }]);
+      }
+      if(col==="md"&&met==="asc"){
+        data = await Data.find().sort({model:'asc'});
+      }
+      if(col==="ct"&&met==="asc"){
+        data = await Data.find().sort({city:'asc'});
+      }
+      res.json(data);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Failed to fetch data" });
+    }
+  });
+app.get("/api/sort", async (req, res) => {
+    try {
+      const data = await Data.find().sort({year:'asc'});
       res.json(data);
     } catch (error) {
       console.log(error);
@@ -67,5 +99,17 @@ app.post('/api/updateData', (req, res) => {
     });
 });
 
+app.post('/api/addData', (req, res) => {
+  const formData = req.body;
+
+  Data.create(formData)
+    .then((createdData) => {
+      res.json(createdData);
+    })
+    .catch((error) => {
+      console.error('Błąd dodawania danych:', error);
+      res.status(500).json({ error: 'Błąd serwera' });
+    });
+});
 const port = process.env.PORT || 8080
 app.listen(port, () => console.log(`Nasłuchiwanie na porcie ${port}`))

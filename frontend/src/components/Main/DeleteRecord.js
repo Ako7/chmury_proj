@@ -18,7 +18,7 @@ const DeleteRecord = ({ recordId }) => {
       });
       if (response.ok) {
         setDeleted(true);
-        toast.success("Usunieto!", {
+        toast.success("Usuwanie!", {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 1000 
           });

@@ -34,6 +34,6 @@ module.exports = async () => {
     
     for (const recordData of recordsToAdd) {
         const newRecord = new Data(recordData);
-        //await newRecord.save();
+        await newRecord.save();
     }
 }
